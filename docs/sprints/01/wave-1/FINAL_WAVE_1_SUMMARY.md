@@ -1,6 +1,6 @@
 # Wave-1 Final Summary Report
 
-**Date:** 2025-10-05  
+**Date:** 06.10.2026
 **Branch:** wave-1 (local)  
 **Commit:** `c388c0e` — `COMMENTS-13..17: wave 2.4 — 2.6 audit integration, cross-tenant fix, cron, throttle, backfill, kill-switch`
 
