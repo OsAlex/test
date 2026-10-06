@@ -1,0 +1,106 @@
+Маркировка ЧЗ — unit-тесты (sprint 01, волны 1–2)
+{
+    "total": 418,
+    "passed": 418,
+    "failed": 0,
+    "per_section": {
+        "MarkingCode": {
+            "passed": 14,
+            "failed": 0
+        },
+        "MarkingStatus (ProhibitionLevel, SPEC §1.6)": {
+            "passed": 18,
+            "failed": 0
+        },
+        "GisMtAuthService (SPEC §1.3/§1.3.1)": {
+            "passed": 9,
+            "failed": 0
+        },
+        "CdnService (SPEC §3.2: ensureToken → /cdn/info → /health/check → /codes/check)": {
+            "passed": 24,
+            "failed": 0
+        },
+        "CodeCheckService (SPEC §1.6/§1.7: errorCode-маппинг, батчи, 203)": {
+            "passed": 25,
+            "failed": 0
+        },
+        "LmChzService (SPEC §3.5/§3.6: /outCheck, /cis/sell, /cis/returned, /cis/sold)": {
+            "passed": 16,
+            "failed": 0
+        },
+        "MarkingCheckService (SPEC §3.4/§3.5: параллельный гибрид, барьер, pre-check, EMERGENCY)": {
+            "passed": 54,
+            "failed": 0
+        },
+        "Check::addMarkingAttributes (SPEC §1.8: matching по item_id, теги 1260-1264)": {
+            "passed": 18,
+            "failed": 0
+        },
+        "Cassa::getTimeZone (SPEC §1.2: 1..11, default 2 = MSK)": {
+            "passed": 10,
+            "failed": 0
+        },
+        "WorkerRace (COMMENTS-9 #11: claim pending, две коннекции)": {
+            "passed": 7,
+            "failed": 0
+        },
+        "WorkerStaleReclaim (COMMENTS-10 2.1/2.7/2.8 + COMMENTS-11 #1/#5: lease semantics)": {
+            "passed": 29,
+            "failed": 0
+        },
+        "SellWorker (COMMENTS-11 #3: идемпотентный retry /cis/sold)": {
+            "passed": 25,
+            "failed": 0
+        },
+        "ReturnWorker (COMMENTS-12 2.1/2.8: идемпотентный retry /cis/sold)": {
+            "passed": 26,
+            "failed": 0
+        },
+        "CdnCircuitBreakerPersistence (COMMENTS-9 #4: break через БД, два воркера)": {
+            "passed": 9,
+            "failed": 0
+        },
+        "MarkingItemValidator (COMMENTS-9 #12: parseCis, package_type)": {
+            "passed": 13,
+            "failed": 0
+        },
+        "AtolPlaceholderGate (COMMENTS-9 #8: prod-гейт INSERT_ATOL_OFFICIAL_EXAMPLE)": {
+            "passed": 12,
+            "failed": 0
+        },
+        "MarkingEmergencyState (COMMENTS-9 #3: ГИС МТ 203 по ИНН)": {
+            "passed": 22,
+            "failed": 0
+        },
+        "MarkingReturnService (COMMENTS-9 #10, решение A: нет двойной записи)": {
+            "passed": 12,
+            "failed": 0
+        },
+        "ProhibitionConfig (COMMENTS-9 #6: уровни/флаги из config, TO_VERIFY)": {
+            "passed": 13,
+            "failed": 0
+        },
+        "AutoloadSmoke (COMMENTS-9 #9: PSR-4 + vendor/autoload)": {
+            "passed": 8,
+            "failed": 0
+        },
+        "MarkingStatusUiPayload (COMMENTS-9 #14: INFO/EMERGENCY/SKIPPED)": {
+            "passed": 16,
+            "failed": 0
+        },
+        "MarkingLogger (COMMENTS-9 #2: PII-маски, уровни)": {
+            "passed": 9,
+            "failed": 0
+        },
+        "MarkingMetrics (COMMENTS-9 #2: счётчики, окно 5 минут)": {
+            "passed": 8,
+            "failed": 0
+        },
+        "DbSmoke (COMMENTS-9 #2/#4: portable DDL, NULL-допуски, NOT NULL, race)": {
+            "passed": 21,
+            "failed": 0
+        }
+    },
+    "failures": [],
+    "log": []
+}

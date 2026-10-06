@@ -1,0 +1,19 @@
+   OK   1. гибрид: обе ветки до барьера → source=HYBRID
+   OK   1. гибрид: prohibition=INFO
+   OK   2. онлайн: source=ONLINE
+   OK   2. онлайн: INFO
+   OK   3. офлайн: source=OFFLINE
+   OK   3. офлайн: INFO
+   OK   4. гонка: онлайн позже барьера → OFFLINE
+   OK   5. гонка: офлайн позже барьера → ONLINE
+   OK   6. гонка: обе позже барьера → EMERGENCY_TIMEOUT
+   OK   6. гонка: prohibition=WARN
+   OK   6. гонка: метрика marking_emergency_total ≥ 1
+   OK   7. sold: outCheck=SOLD → WARN (дубль, верификация)
+   OK   8. cancelled: outCheck=CANCELLED → BLOCK
+   OK   9. return: до /cis/returned — WARN
+   OK   9. return: после /cis/returned → INFO (КИ снова доступен)
+   OK   10. sold-экспорт: total ≥ 1
+   OK   10. sold-экспорт: INTEGR-CIS-0010 в списке
+
+Mock-интеграция (COMMENTS-9 блок 4): PASS=17 FAIL=0
