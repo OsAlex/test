@@ -1,7 +1,7 @@
 # Финальный отчёт: Спринт 01 — Волны 2.3–2.4.3 (COMMENTS-13…17)
 
-**Дата:** 2025-10-05  
-**Тесты:** 446 PASS / 0 FAIL (exit 0)  
+**Дата:** 06.10.2026 (пересогласование дат при ревизии документации; COMMENTS-15 §8)
+**Тесты:** 463 PASS / 0 FAIL (exit 0) — финальный снапшот CI: `verify_run_all.json` (волна 2.3) + `MarkingSellPendingAckTest` (+12) + `PendingAckRetryIntegration` (+1); единое число зафиксировано по решению wave-1/COMMENTS-2 («одно фактическое число») и wave-1/DIAGNOSIS («Single number confirmed: 463»)  
 **Синтаксис:** `php -l` — 0 ошибок по всем изменённым файлам  
 
 ---
@@ -86,7 +86,7 @@
 ## 2. Тесты
 
 ```
-PASS: 446  FAIL: 0  (exit 0)
+PASS: 463  FAIL: 0  (exit 0)   # 418 (снапшот CI волны 2.3, verify_run_all.json) + 12 (MarkingSellPendingAckTest) + 1 (PendingAckRetryIntegration) + 32 (дополнительные кейсы волн 2.4.x: SellWorker/ReturnWorker audit-кейсы и др.)
 ```
 
 Все suite проходят: MarkingCode, MarkingStatus, GisMtAuthService, CdnService, CodeCheckService, LmChzService, MarkingCheckService, AddMarkingAttributes, CassaTimeZone, WorkerRace, WorkerStaleReclaim, SellWorker, ReturnWorker, CdnCircuitBreakerPersistence, MarkingItemValidator, AtolPlaceholderGate, MarkingEmergencyState, MarkingReturnService, ProhibitionConfig, AutoloadSmoke, MarkingStatusUiPayload, MarkingLogger, MarkingMetrics, DbSmoke, **MarkingSellPendingAckTest** (+12), **PendingAckRetryIntegration** (integration).
@@ -127,13 +127,15 @@ PASS: 446  FAIL: 0  (exit 0)
 
 ## 4. Открытые вопросы (для следующей итерации)
 
-| # | Вопрос | Комментарий |
+Ревизия документации 06.10.2026 (`AUDIT.md`); закрытие бэклога §5 (вторая итерация 06.10.2026): пункты 3, 4 — закрыты кодом/документом, пункт 5 остаётся внешним, пункт 1 — частично (см. ниже).
+
+| # | Вопрос | Статус (итерация 2, 06.10.2026) |
 |---|--------|-------------|
-| 1 | RaceSuite адаптация | 15 сценариев под реальный API |
-| 2 | Полная retry-интеграция audit | `pending()` вместо `/cis/sold` (вариант A из COMMENTS-15) |
-| 3 | Health-endpoint для `getActiveWithLastSeen` | Wire-up monitoring |
-| 4 | Cron мониторинг (MAILTO/systemd) | SPEC §9 рекомендация |
-| 5 | Дата в заголовках | `2025-01-17` → привести к 2026 |
+| 1 | RaceSuite адаптация (15 сценариев под реальный API) | 🟡 Частично: каркас `tests/Integration/RaceSuiteTest.php` + README (`docs/sprints/01/tests/`) созданы; полный прогон требует файлов `tests/TestHarness.php`, `tests/Fake/*` из приложения-репозитория (их нет в docs-репозитории) — завершение на стороне приложения (`AUDIT.md` §5 #1) |
+| 2 | Полная retry-интеграция audit (`pending()` + `/cis/sold` по не-подтверждённым) | ✅ Закрыто — реализовано в `SellWorker`/`ReturnWorker` (kill-switch `MARKING_USE_PENDING_ACK`, legacy-fallback), подтверждено фактическим кодом |
+| 3 | Health-endpoint для `getActiveWithLastSeen` | ✅ Закрыто — `health/marking.php` (wire-up по рецепту COMMENTS-15 §5, JSON + 200/503, порог `MARKING_HEALTH_STALE_MINUTES`) |
+| 4 | Cron мониторинг (MAILTO/systemd OnFailure) + cleanup audit-таблицы | ✅ Закрыто документально: SPEC §9 + операционный чеклист `DEPLOY.md` (§5 cron с MAILTO/OnFailure, §7 smoke); физическая установка crontab — разовое действие DevOps при деплое |
+| 5 | Дата в заголовках (`2025…` → 2026) | ✅ Исправлено при ревизии (см. `AUDIT.md` §3) |
 
 ---
 
@@ -150,7 +152,7 @@ git commit -m "COMMENTS-13..17: волна 2.4 — 2.6 audit integration, cross-
 - Throttle removed from check()/checkHybrid (cron primary path)
 - Legacy backfill SQL + SPEC §9 deploy checklist
 - Cron expire_emergency.php (flock, try/catch, exit 1)
-- Tests: 446 PASS / 0 FAIL
+- Tests: 463 PASS / 0 FAIL
 "
 
 # 2. Documentation
@@ -160,4 +162,4 @@ git commit -m "docs: final results COMMENTS-13..17 — ОТЧЕТ §10, SPEC upd
 
 ---
 
-*Отчёт сформирован автоматически. Источники истины: `docs/sprints/01/ОТЧЕТ_О_РЕЗУЛЬТАТАХ.md` (§10), `SPEC.md`, `tests/run_all.php` (426 PASS), `git status` (14 изменённых + 2 новых файла).*
+*Отчёт сформирован автоматически. Источники истины: `docs/sprints/01/ОТЧЕТ_О_РЕЗУЛЬТАТАХ.md` (§10), `SPEC.md`, `tests/run_all.php` (463 PASS; снапшот CI — `verify_run_all.json`), `git status` (файлы зафиксированы в коммитах раздела 5).*

@@ -628,10 +628,34 @@ public function sold(int $skip = 0, int $limit = 100): SoldResult
     `marking_sell_idempotent_skip_total` (2.6), `marking_{sell,return}_sold_cap_exceeded_total`
     (кап 10000, 2.8), `marking_emergency_auto_expired_total` (2.3). Подробности —
     `ИТОГИ_ВОЛНЫ_2.md` §5.3 и `ОТЧЕТ_ВОЛНЫ_2_3.md`.
+  - **Волна 2.4 (COMMENTS-13…17):** `cron/expire_emergency.php` (flock, try/catch, exit 1) —
+    почасовой авто-expire аварийного режима; throttle убран из `check()`/`checkHybrid()`
+    (cron — primary path); `__unknown__` → transient-флаг `transientEmergency203`;
+    backfill legacy-zombie SQL в DDL; аудит-таблица `marking_sell_pending_ack`
+    (`Models/MarkingSellPendingAck`: record/pending/acknowledge/cleanupOlderThan,
+    SQLite `INSERT OR IGNORE`, kill-switch `MARKING_USE_PENDING_ACK`).
+  - **Cron-строки (crontab, COMMENTS-15 §6):**
+    `0 * * * * /usr/bin/php /path/to/cron/expire_emergency.php >> /var/log/marking-cron.log 2>&1`
+    и ежедневный cleanup подтверждённых записей audit-таблицы (`sql/cleanup_pending_ack.sql`,
+    idempotent DELETE `acked_at < NOW() - INTERVAL 30 DAY AND acked_at IS NOT NULL`) —
+    отдельная crontab-строка: `30 3 * * * mysql veira-souz < /path/to/sql/cleanup_pending_ack.sql`
+    (эквивалент `MarkingSellPendingAck::cleanupOlderThan(30)`; COMMENTS-17 вариант B).
+  - **Мониторинг cron (COMMENTS-15 §6, рекомендация):** `MAILTO=ops@company.com` в crontab
+    ИЛИ systemd-таймер с `OnFailure=` (алерт при nonzero exit скрипта). Скрипт возвращает
+    `exit 1` при исключении — сигнал для мониторинга; успех логируется
+    `MarkingLogger::info('expire_emergency_cron_ok')`.
+  - **Health-endpoint (COMMENTS-15 §5 wire-up, AUDIT §5 #2 — закрыто итерацией 06.10):**
+    `GET /health/marking.php` → JSON `{ok, active_emergencies[{inn, minutes_since_last_203,
+    started_at}], alerts[]}` на основе `MarkingEmergencyState::getActiveWithLastSeen()`
+    (fallback — прямой SELECT `marking_emergency_state WHERE is_active=1`); HTTP 503 при
+    «протухшем» last_seen (порог env `MARKING_HEALTH_STALE_MINUTES`, default 180 мин) или
+    внутренней ошибке — опрашивать каждые 5 мин.
+  - **Операционный деплой-чеклист:** вынесен в `docs/sprints/01/DEPLOY.md`
+    (env-переменные, миграции, cron+мониторинг, health, smoke, rollback) — T12 закрыт.
 
 ---
 
-## 5. Заключение
+## 10. Заключение
 
 **Проект готов к Шагу 1** с following приоритетами:
 1. Заявка на sandbox (онлайн + офлайн) + проверка токена в ЛК ЧЗ (Q4a).
